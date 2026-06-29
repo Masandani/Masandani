@@ -3,129 +3,356 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سیستم حضور و حقوق کارگران</title>
+<title>chegall | سیستم حضور و حقوق</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap');
+
+:root {
+  --navy: #1B2B8C;
+  --navy2: #141f6b;
+  --cream: #F2EDE4;
+  --cream2: #E8E0D4;
+  --white: #ffffff;
+  --text: #1B2B8C;
+  --muted: #6b7bb8;
+  --red: #c0392b;
+  --green: #1a6b3c;
+  --radius: 14px;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Tahoma, Arial, sans-serif; background: #f0f4f8; color: #1a202c; direction: rtl; }
-.app { max-width: 980px; margin: 0 auto; padding: 0 16px 60px; }
 
+body {
+  font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  direction: rtl;
+  min-height: 100vh;
+}
+
+.app { max-width: 1000px; margin: 0 auto; padding: 0 16px 80px; }
+
+/* Header */
 .app-header {
-  background: linear-gradient(135deg, #1e3a5f, #2d6a9f);
-  color: white; padding: 18px 24px;
-  border-radius: 0 0 16px 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(30,58,95,0.3);
+  background: var(--navy);
+  color: white;
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 28px;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 6px 24px rgba(27,43,140,0.25);
 }
-.app-header h1 { font-size: 1.3rem; }
-.month-nav { display: flex; align-items: center; gap: 10px; }
+
+.logo {
+  font-size: 1.7rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: white;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.logo span { opacity: 0.6; font-weight: 300; font-size: 0.85rem; margin-right: 10px; vertical-align: middle; }
+
+.month-nav { display: flex; align-items: center; gap: 12px; }
 .month-nav button {
-  background: rgba(255,255,255,0.2); border: none; color: white;
-  padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-family: inherit;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  color: white;
+  padding: 7px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition: background 0.2s;
 }
-.month-nav button:hover { background: rgba(255,255,255,0.35); }
-.month-display { font-size: 1rem; font-weight: bold; min-width: 70px; text-align: center; }
+.month-nav button:hover { background: rgba(255,255,255,0.28); }
+.month-display {
+  font-size: 1.05rem;
+  font-weight: 700;
+  min-width: 120px;
+  text-align: center;
+  background: rgba(255,255,255,0.12);
+  padding: 7px 16px;
+  border-radius: 8px;
+}
 
-.tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  background: var(--cream2);
+  padding: 6px;
+  border-radius: var(--radius);
+}
 .tab-btn {
-  flex: 1; padding: 11px; border: 2px solid #d0dce8; background: white;
-  border-radius: 10px; cursor: pointer; font-size: 0.9rem; color: #4a5568;
-  transition: all 0.2s; font-family: inherit;
+  flex: 1; padding: 11px 8px;
+  border: none; background: transparent;
+  border-radius: 10px; cursor: pointer;
+  font-size: 0.88rem; color: var(--muted);
+  font-family: inherit; font-weight: 500;
+  transition: all 0.2s;
 }
-.tab-btn.active { border-color: #2d6a9f; background: #2d6a9f; color: white; font-weight: bold; }
-.tab-btn:hover:not(.active) { border-color: #2d6a9f; color: #2d6a9f; }
+.tab-btn.active {
+  background: var(--navy);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(27,43,140,0.25);
+}
 
+/* Section */
 .section { display: none; }
 .section.active { display: block; }
 
-.card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 16px; }
-.form-card { border: 2px dashed #2d6a9f; }
-.form-card h3 { color: #2d6a9f; margin-bottom: 16px; }
-
-.form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; margin-bottom: 16px; }
-.form-grid label { display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; color: #4a5568; }
-.form-grid input, .form-grid select {
-  padding: 9px 11px; border: 1.5px solid #d0dce8; border-radius: 8px;
-  font-size: 0.92rem; font-family: inherit; transition: border-color 0.2s;
+/* Card */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: 0 2px 12px rgba(27,43,140,0.08);
+  margin-bottom: 16px;
 }
-.form-grid input:focus, .form-grid select:focus { outline: none; border-color: #2d6a9f; }
 
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.section-header h2 {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-header h2::before {
+  content: '';
+  display: inline-block;
+  width: 5px; height: 22px;
+  background: var(--navy);
+  border-radius: 3px;
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--navy); color: white;
+  border: none; padding: 10px 22px;
+  border-radius: 9px; cursor: pointer;
+  font-size: 0.88rem; font-weight: 700;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--navy2); }
+
+.btn-secondary {
+  background: var(--cream2); color: var(--navy);
+  border: none; padding: 10px 20px;
+  border-radius: 9px; cursor: pointer;
+  font-size: 0.88rem; font-family: inherit;
+}
+.btn-secondary:hover { background: var(--cream); }
+.btn-sm { padding: 6px 14px !important; font-size: 0.8rem !important; }
+
+/* Form */
+.form-card { border: 2px dashed var(--navy); background: #f7f9ff; }
+.form-card h3 { color: var(--navy); margin-bottom: 18px; font-size: 1rem; font-weight: 700; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px; margin-bottom: 18px;
+}
+.form-grid label { display: flex; flex-direction: column; gap: 6px; font-size: 0.83rem; color: var(--muted); font-weight: 500; }
+.form-grid input, .form-grid select {
+  padding: 9px 12px; border: 1.5px solid #d5d9ee;
+  border-radius: 9px; font-size: 0.9rem; font-family: inherit;
+  color: var(--navy); background: white;
+  transition: border-color 0.2s;
+}
+.form-grid input:focus, .form-grid select:focus { outline: none; border-color: var(--navy); }
 .form-actions { display: flex; gap: 10px; }
-.btn-primary { background: #2d6a9f; color: white; border: none; padding: 10px 22px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: bold; font-family: inherit; }
-.btn-primary:hover { background: #1e4f7a; }
-.btn-secondary { background: #e2e8f0; color: #4a5568; border: none; padding: 10px 22px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-family: inherit; }
-.btn-secondary:hover { background: #cbd5e0; }
-.btn-sm { padding: 6px 12px !important; font-size: 0.82rem !important; }
 
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
-.section-header h2 { font-size: 1.15rem; color: #1e3a5f; }
-.days-info { font-size: 0.82rem; color: #718096; }
-
-.empty-state { text-align: center; padding: 60px 20px; color: #718096; font-size: 0.95rem; }
+/* Empty */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 0.95rem; }
 
 /* Workers */
-.workers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
-.worker-card { background: white; border-radius: 12px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 4px solid #2d6a9f; }
-.worker-name { font-size: 1rem; font-weight: bold; margin-bottom: 4px; }
-.worker-role { color: #718096; font-size: 0.82rem; margin-bottom: 8px; }
-.worker-wage { font-size: 0.88rem; color: #2d6a9f; margin: 6px 0; }
-.worker-ot { font-size: 0.82rem; color: #718096; }
-.badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; margin-bottom: 8px; font-weight: bold; }
-.badge-daily { background: #ebf8ff; color: #2b6cb0; }
-.badge-fixed { background: #f0fff4; color: #276749; }
-.worker-actions { display: flex; gap: 8px; margin-top: 12px; }
-.btn-edit { flex: 1; background: #ebf8ff; color: #2b6cb0; border: none; padding: 7px; border-radius: 7px; cursor: pointer; font-size: 0.82rem; font-family: inherit; }
-.btn-edit:hover { background: #bee3f8; }
-.btn-delete { flex: 1; background: #fff5f5; color: #c53030; border: none; padding: 7px; border-radius: 7px; cursor: pointer; font-size: 0.82rem; font-family: inherit; }
-.btn-delete:hover { background: #fed7d7; }
+.workers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+
+.worker-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: 0 2px 12px rgba(27,43,140,0.08);
+  border-right: 5px solid var(--navy);
+  position: relative;
+}
+
+.worker-name { font-size: 1rem; font-weight: 700; margin-bottom: 3px; color: var(--navy); }
+.worker-role { color: var(--muted); font-size: 0.8rem; margin-bottom: 10px; }
+.worker-wage { font-size: 0.85rem; color: var(--navy); margin: 5px 0; font-weight: 500; }
+.worker-ot { font-size: 0.8rem; color: var(--muted); }
+
+.badge {
+  display: inline-block; padding: 3px 10px;
+  border-radius: 20px; font-size: 0.73rem; margin-bottom: 8px; font-weight: 700;
+}
+.badge-daily { background: #e8ecff; color: var(--navy); }
+.badge-fixed { background: #e8f5ee; color: var(--green); }
+
+.worker-actions { display: flex; gap: 8px; margin-top: 14px; }
+.btn-edit {
+  flex: 1; background: #e8ecff; color: var(--navy);
+  border: none; padding: 7px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-family: inherit;
+}
+.btn-edit:hover { background: #d0d8ff; }
+.btn-delete {
+  flex: 1; background: #fdecea; color: var(--red);
+  border: none; padding: 7px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-family: inherit;
+}
+.btn-delete:hover { background: #fbd5d2; }
 
 /* Day picker */
-.day-picker { display: flex; flex-wrap: wrap; gap: 6px; background: white; padding: 14px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 16px; }
-.day-btn { width: 38px; height: 38px; border: 1.5px solid #d0dce8; border-radius: 8px; background: white; cursor: pointer; font-size: 0.88rem; color: #4a5568; font-family: inherit; transition: all 0.15s; }
-.day-btn:hover { border-color: #2d6a9f; color: #2d6a9f; }
-.day-btn.sel { background: #2d6a9f; color: white; border-color: #2d6a9f; font-weight: bold; }
-.day-btn.has-data { border-color: #48bb78; }
+.day-picker {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  background: white; padding: 14px; border-radius: var(--radius);
+  box-shadow: 0 2px 12px rgba(27,43,140,0.07); margin-bottom: 16px;
+}
+.day-btn {
+  width: 40px; height: 40px;
+  border: 1.5px solid #d5d9ee; border-radius: 9px;
+  background: white; cursor: pointer; font-size: 0.85rem;
+  color: var(--navy); font-family: inherit; transition: all 0.15s;
+  font-weight: 500;
+}
+.day-btn:hover { border-color: var(--navy); background: #f0f3ff; }
+.day-btn.sel { background: var(--navy); color: white; border-color: var(--navy); font-weight: 700; }
+.day-btn.has-data { border-color: #27ae60; background: #f0fff6; }
+.day-btn.sel.has-data { background: var(--navy); color: white; }
 
-.att-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-.att-header h3 { color: #1e3a5f; }
+.att-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.att-header h3 { color: var(--navy); font-size: 1rem; font-weight: 700; }
 
+/* Table */
 table { width: 100%; border-collapse: collapse; }
-th { background: #f7fafc; padding: 10px 12px; text-align: right; font-size: 0.88rem; color: #4a5568; border-bottom: 2px solid #e2e8f0; }
-td { padding: 9px 12px; border-bottom: 1px solid #f0f4f8; font-size: 0.88rem; vertical-align: middle; }
-tr.present { background: #f0fff4; }
-tr.absent { background: #fff5f5; }
+th {
+  background: var(--cream);
+  padding: 10px 12px; text-align: right;
+  font-size: 0.82rem; color: var(--navy);
+  border-bottom: 2px solid var(--cream2);
+  font-weight: 700;
+}
+td {
+  padding: 10px 12px; border-bottom: 1px solid #f0f0f8;
+  font-size: 0.85rem; vertical-align: middle;
+}
+tr.present { background: #f5fffb; }
+tr.absent { background: #fffaf9; }
 
-.toggle-group { display: flex; border-radius: 7px; overflow: hidden; border: 1.5px solid #d0dce8; width: fit-content; }
-.toggle-btn { padding: 5px 13px; border: none; background: white; cursor: pointer; font-size: 0.82rem; color: #4a5568; font-family: inherit; }
-.toggle-btn:first-child { border-left: 1px solid #d0dce8; }
-.toggle-btn.tp { background: #48bb78; color: white; font-weight: bold; }
-.toggle-btn.ta { background: #fc8181; color: white; font-weight: bold; }
+.toggle-group {
+  display: flex; border-radius: 8px; overflow: hidden;
+  border: 1.5px solid #d5d9ee; width: fit-content;
+}
+.toggle-btn {
+  padding: 5px 14px; border: none; background: white;
+  cursor: pointer; font-size: 0.8rem; color: var(--muted); font-family: inherit;
+}
+.toggle-btn:first-child { border-left: 1px solid #d5d9ee; }
+.toggle-btn.tp { background: #27ae60; color: white; font-weight: 700; }
+.toggle-btn.ta { background: #e74c3c; color: white; font-weight: 700; }
 
-.ot-input { width: 75px; padding: 5px 8px; border: 1.5px solid #d0dce8; border-radius: 7px; font-size: 0.88rem; text-align: center; font-family: inherit; }
-.ot-input:focus { outline: none; border-color: #2d6a9f; }
+.ot-input {
+  width: 75px; padding: 5px 8px;
+  border: 1.5px solid #d5d9ee; border-radius: 8px;
+  font-size: 0.85rem; text-align: center; font-family: inherit;
+}
+.ot-input:focus { outline: none; border-color: var(--navy); }
+
+/* Advance (مساعده) */
+.advance-section { margin-top: 20px; }
+.advance-section h3 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+.advance-list { display: flex; flex-direction: column; gap: 8px; }
+.advance-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; background: var(--cream); border-radius: 10px;
+  flex-wrap: wrap;
+}
+.advance-row .worker-label { font-weight: 600; font-size: 0.85rem; min-width: 140px; color: var(--navy); }
+.advance-input {
+  width: 150px; padding: 7px 10px;
+  border: 1.5px solid #d5d9ee; border-radius: 8px;
+  font-size: 0.85rem; font-family: inherit; color: var(--navy);
+}
+.advance-input:focus { outline: none; border-color: var(--navy); }
+.advance-note { font-size: 0.75rem; color: var(--muted); }
 
 /* Payroll */
-.payroll-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-bottom: 20px; }
-.payroll-card { background: white; border-radius: 12px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 4px solid #2d6a9f; }
-.payroll-name { font-size: 1rem; font-weight: bold; margin-bottom: 4px; }
-.payroll-role { color: #718096; font-size: 0.82rem; margin-bottom: 8px; }
+.payroll-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; margin-bottom: 22px; }
+
+.payroll-card {
+  background: white; border-radius: var(--radius);
+  padding: 18px; box-shadow: 0 2px 12px rgba(27,43,140,0.08);
+  border-top: 5px solid var(--navy);
+}
+.payroll-name { font-size: 1rem; font-weight: 700; margin-bottom: 3px; color: var(--navy); }
+.payroll-role { color: var(--muted); font-size: 0.8rem; margin-bottom: 10px; }
+
 .detail-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
-.detail-table td { padding: 5px 2px; font-size: 0.85rem; border-bottom: 1px solid #f0f4f8; }
-.detail-table td:last-child { text-align: left; color: #2d6a9f; font-weight: 500; }
-.val-absent { color: #c53030 !important; }
-.val-ot { color: #276749 !important; }
-.payroll-total { margin-top: 12px; padding-top: 12px; border-top: 2px solid #e2e8f0; text-align: left; font-size: 0.95rem; }
-.payroll-total strong { color: #1e3a5f; font-size: 1.05rem; }
+.detail-table td { padding: 6px 2px; font-size: 0.83rem; border-bottom: 1px solid #f0f0f8; color: #444; }
+.detail-table td:last-child { text-align: left; color: var(--navy); font-weight: 600; }
+.val-absent { color: var(--red) !important; }
+.val-ot { color: var(--green) !important; }
+.val-advance { color: #d35400 !important; }
 
-.grand-total { background: linear-gradient(135deg, #1e3a5f, #2d6a9f); color: white; border-radius: 12px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; font-size: 1.05rem; margin-bottom: 16px; }
-.grand-total strong { font-size: 1.3rem; }
+.payroll-total {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 2px solid var(--cream2);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.payroll-total .label { font-size: 0.85rem; color: var(--muted); }
+.payroll-total strong { color: var(--navy); font-size: 1.1rem; }
 
-.btn-print { background: #276749; color: white; border: none; padding: 12px 28px; border-radius: 10px; cursor: pointer; font-size: 0.95rem; font-weight: bold; font-family: inherit; display: block; margin: 0 auto; }
-.btn-print:hover { background: #1c4532; }
+.grand-total {
+  background: var(--navy);
+  color: white; border-radius: var(--radius);
+  padding: 22px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 1rem; margin-bottom: 18px;
+  box-shadow: 0 6px 20px rgba(27,43,140,0.3);
+}
+.grand-total strong { font-size: 1.4rem; font-weight: 900; }
+
+.btn-print {
+  background: var(--navy); color: white;
+  border: none; padding: 13px 32px;
+  border-radius: 10px; cursor: pointer;
+  font-size: 0.95rem; font-weight: 700; font-family: inherit;
+  display: block; margin: 0 auto;
+  box-shadow: 0 4px 14px rgba(27,43,140,0.3);
+}
+.btn-print:hover { background: var(--navy2); }
+
+.step-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;
+  color: var(--muted); text-transform: uppercase; margin-bottom: 2px;
+}
+
+.divider { height: 1px; background: var(--cream2); margin: 16px 0; }
 
 @media print {
-  .tabs, .month-nav, .btn-print, .day-picker, .btn-primary, .btn-secondary, .worker-actions { display: none !important; }
-  .app-header { background: #1e3a5f !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .tabs, .month-nav, .btn-print, .day-picker, .btn-primary, .btn-secondary, .worker-actions, .advance-section { display: none !important; }
+  body { background: white; }
+  .app-header { background: var(--navy) !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
   .payroll-card { break-inside: avoid; }
   #sec-workers, #sec-attendance { display: none !important; }
   #sec-payroll { display: block !important; }
@@ -135,14 +362,15 @@ tr.absent { background: #fff5f5; }
   .app-header { flex-direction: column; text-align: center; }
   .tabs { flex-direction: column; }
   .workers-grid, .payroll-cards { grid-template-columns: 1fr; }
-  td, th { padding: 7px 6px; font-size: 0.8rem; }
+  td, th { padding: 7px 6px; font-size: 0.78rem; }
+  .month-display { min-width: auto; }
 }
 </style>
 </head>
 <body>
 <div class="app">
   <header class="app-header">
-    <h1>سیستم حضور و حقوق کارگران</h1>
+    <div class="logo">chegall <span>سیستم حضور و حقوق</span></div>
     <div class="month-nav">
       <button onclick="changeMonth(-1)">◀ قبلی</button>
       <span class="month-display" id="monthDisplay"></span>
@@ -151,9 +379,10 @@ tr.absent { background: #fff5f5; }
   </header>
 
   <nav class="tabs">
-    <button class="tab-btn active" onclick="showTab('workers', this)">👷 کارگران</button>
-    <button class="tab-btn" onclick="showTab('attendance', this)">📋 حضور و غیاب</button>
-    <button class="tab-btn" onclick="showTab('payroll', this)">💰 محاسبه حقوق</button>
+    <button class="tab-btn active" onclick="showTab('workers',this)">👷 کارگران</button>
+    <button class="tab-btn" onclick="showTab('attendance',this)">📋 حضور و غیاب</button>
+    <button class="tab-btn" onclick="showTab('advance',this)">💵 مساعده</button>
+    <button class="tab-btn" onclick="showTab('payroll',this)">💰 حقوق ماهانه</button>
   </nav>
 
   <!-- WORKERS -->
@@ -162,54 +391,52 @@ tr.absent { background: #fff5f5; }
       <h2>لیست کارگران</h2>
       <button class="btn-primary" onclick="openWorkerForm()">+ افزودن کارگر</button>
     </div>
-
     <div id="worker-form" class="card form-card" style="display:none">
       <h3 id="form-title">افزودن کارگر جدید</h3>
       <div class="form-grid">
-        <label>نام و نام خانوادگی
-          <input id="f-name" placeholder="مثال: علی محمدی">
-        </label>
-        <label>سمت / شغل
-          <input id="f-role" placeholder="مثال: نگهبان، کارگر ساده">
-        </label>
+        <label>نام و نام خانوادگی<input id="f-name" placeholder="علی محمدی"></label>
+        <label>سمت / شغل<input id="f-role" placeholder="نگهبان، کارگر ساده..."></label>
         <label>نوع قرارداد
           <select id="f-type" onchange="toggleWageFields()">
             <option value="daily">روزمزد</option>
             <option value="fixed">ماهیانه ثابت</option>
           </select>
         </label>
-        <label id="daily-field">دستمزد روزانه (تومان)
-          <input id="f-daily" type="number" placeholder="0" min="0">
-        </label>
-        <label id="fixed-field" style="display:none">حقوق ماهانه (تومان)
-          <input id="f-monthly" type="number" placeholder="0" min="0">
-        </label>
-        <label>نرخ اضافه‌کاری (تومان/ساعت)
-          <input id="f-ot" type="number" placeholder="0" min="0">
-        </label>
+        <label id="daily-field">دستمزد روزانه (تومان)<input id="f-daily" type="number" placeholder="0" min="0"></label>
+        <label id="fixed-field" style="display:none">حقوق ماهانه (تومان)<input id="f-monthly" type="number" placeholder="0" min="0"></label>
+        <label>نرخ اضافه‌کاری (تومان/ساعت)<input id="f-ot" type="number" placeholder="0" min="0"></label>
       </div>
       <div class="form-actions">
         <button class="btn-primary" onclick="saveWorker()">ذخیره</button>
         <button class="btn-secondary" onclick="closeWorkerForm()">انصراف</button>
       </div>
     </div>
-
     <div id="workers-list"></div>
   </div>
 
   <!-- ATTENDANCE -->
   <div id="sec-attendance" class="section">
-    <div class="section-header">
-      <h2 id="att-title">حضور و غیاب</h2>
-    </div>
+    <div class="section-header"><h2>حضور و غیاب</h2></div>
     <div id="day-picker" class="day-picker"></div>
     <div id="att-content"></div>
+  </div>
+
+  <!-- ADVANCE -->
+  <div id="sec-advance" class="section">
+    <div class="section-header">
+      <h2>مساعده</h2>
+      <span style="font-size:0.82rem;color:var(--muted)" id="adv-month-label"></span>
+    </div>
+    <div class="card">
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">مبلغ مساعده هر کارگر در این ماه را وارد کنید. این مبلغ از حقوق نهایی کسر می‌شود.</p>
+      <div id="advance-list" class="advance-list"></div>
+    </div>
   </div>
 
   <!-- PAYROLL -->
   <div id="sec-payroll" class="section">
     <div class="section-header">
-      <h2 id="pay-title">گزارش حقوق</h2>
+      <h2 id="pay-title">حقوق ماهانه</h2>
       <span class="days-info" id="pay-days"></span>
     </div>
     <div id="payroll-content"></div>
@@ -217,27 +444,67 @@ tr.absent { background: #fff5f5; }
 </div>
 
 <script>
-// ── Storage ──────────────────────────────────────────────
-const S = {
-  workers: () => JSON.parse(localStorage.getItem('pw_workers') || '[]'),
-  saveWorkers: v => localStorage.setItem('pw_workers', JSON.stringify(v)),
-  att: () => JSON.parse(localStorage.getItem('pw_att') || '{}'),
-  saveAtt: v => localStorage.setItem('pw_att', JSON.stringify(v)),
+// ── Jalali conversion ─────────────────────────────────────
+const J = {
+  toJalali(gy, gm, gd) {
+    let g_d_no, j_d_no, j_np, i;
+    const g_days_in_month = [31,28,31,30,31,30,31,31,30,31,30,31];
+    const j_days_in_month = [31,31,31,31,31,31,30,30,30,30,30,29];
+    gy -= 1600; gm -= 1; gd -= 1;
+    g_d_no = 365*gy + Math.floor((gy+3)/4) - Math.floor((gy+99)/100) + Math.floor((gy+399)/400);
+    for (i=0; i<gm; i++) g_d_no += g_days_in_month[i];
+    if (gm>1 && ((gy%4==0 && gy%100!=0)||(gy+1600)%400==0)) g_d_no++;
+    g_d_no += gd;
+    j_d_no = g_d_no - 79;
+    j_np = Math.floor(j_d_no/12053); j_d_no %= 12053;
+    let jy = 979 + 33*j_np + 4*Math.floor(j_d_no/1461);
+    j_d_no %= 1461;
+    if (j_d_no >= 366) { jy += Math.floor((j_d_no-1)/365); j_d_no = (j_d_no-1)%365; }
+    for (i=0; i<11 && j_d_no>=j_days_in_month[i]; i++) j_d_no -= j_days_in_month[i];
+    return [jy, i+1, j_d_no+1];
+  },
+  daysInMonth(jy, jm) {
+    if (jm <= 6) return 31;
+    if (jm <= 11) return 30;
+    // اسفند
+    return this.isLeap(jy) ? 30 : 29;
+  },
+  isLeap(jy) {
+    const a = [1,5,9,13,17,22,26,30];
+    return a.indexOf(jy % 33) >= 0;
+  },
+  monthName(m) {
+    return ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'][m-1];
+  },
+  today() { const t = new Date(); return this.toJalali(t.getFullYear(), t.getMonth()+1, t.getDate()); }
 };
 
-function attKey(y, m, d, wid) {
-  return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}_${wid}`;
+// ── Storage ───────────────────────────────────────────────
+const S = {
+  workers: () => JSON.parse(localStorage.getItem('cg_workers') || '[]'),
+  saveWorkers: v => localStorage.setItem('cg_workers', JSON.stringify(v)),
+  att: () => JSON.parse(localStorage.getItem('cg_att') || '{}'),
+  saveAtt: v => localStorage.setItem('cg_att', JSON.stringify(v)),
+  advances: () => JSON.parse(localStorage.getItem('cg_adv') || '{}'),
+  saveAdvances: v => localStorage.setItem('cg_adv', JSON.stringify(v)),
+};
+
+function attKey(jy, jm, jd, wid) {
+  return `${jy}-${String(jm).padStart(2,'0')}-${String(jd).padStart(2,'0')}_${wid}`;
 }
 
-function daysInMonth(y, m) { return new Date(y, m, 0).getDate(); }
+function advKey(jy, jm, wid) {
+  return `${jy}-${String(jm).padStart(2,'0')}_${wid}`;
+}
 
 function fmt(n) { return Number(n||0).toLocaleString('fa-IR'); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 // ── State ─────────────────────────────────────────────────
-const today = new Date();
-let curYear = today.getFullYear();
-let curMonth = today.getMonth() + 1;
-let curDay = today.getDate();
+const todayJ = J.today();
+let curYear = todayJ[0];
+let curMonth = todayJ[1];
+let curDay = todayJ[2];
 let editId = null;
 
 // ── Month nav ─────────────────────────────────────────────
@@ -245,13 +512,16 @@ function changeMonth(dir) {
   curMonth += dir;
   if (curMonth < 1) { curMonth = 12; curYear--; }
   if (curMonth > 12) { curMonth = 1; curYear++; }
+  const dm = J.daysInMonth(curYear, curMonth);
+  if (curDay > dm) curDay = dm;
   updateMonthDisplay();
   renderAttendance();
   renderPayroll();
+  renderAdvance();
 }
 
 function updateMonthDisplay() {
-  document.getElementById('monthDisplay').textContent = `${curMonth}/${curYear}`;
+  document.getElementById('monthDisplay').textContent = `${J.monthName(curMonth)} ${curYear}`;
 }
 
 // ── Tabs ──────────────────────────────────────────────────
@@ -262,6 +532,7 @@ function showTab(id, btn) {
   btn.classList.add('active');
   if (id === 'attendance') renderAttendance();
   if (id === 'payroll') renderPayroll();
+  if (id === 'advance') renderAdvance();
 }
 
 // ── Workers ───────────────────────────────────────────────
@@ -276,12 +547,10 @@ function openWorkerForm(w) {
   document.getElementById('f-ot').value = w ? (w.overtimeRate||'') : '';
   toggleWageFields();
   document.getElementById('worker-form').style.display = 'block';
+  document.getElementById('worker-form').scrollIntoView({behavior:'smooth'});
 }
 
-function closeWorkerForm() {
-  document.getElementById('worker-form').style.display = 'none';
-  editId = null;
-}
+function closeWorkerForm() { document.getElementById('worker-form').style.display = 'none'; editId = null; }
 
 function toggleWageFields() {
   const t = document.getElementById('f-type').value;
@@ -294,16 +563,14 @@ function saveWorker() {
   if (!name) return alert('نام کارگر را وارد کنید');
   const w = {
     id: editId || Date.now().toString(),
-    name,
-    role: document.getElementById('f-role').value.trim(),
+    name, role: document.getElementById('f-role').value.trim(),
     type: document.getElementById('f-type').value,
     dailyWage: document.getElementById('f-daily').value,
     monthlySalary: document.getElementById('f-monthly').value,
     overtimeRate: document.getElementById('f-ot').value,
   };
   let workers = S.workers();
-  if (editId) workers = workers.map(x => x.id === editId ? w : x);
-  else workers.push(w);
+  workers = editId ? workers.map(x => x.id === editId ? w : x) : [...workers, w];
   S.saveWorkers(workers);
   closeWorkerForm();
   renderWorkers();
@@ -318,42 +585,32 @@ function deleteWorker(id) {
 function renderWorkers() {
   const workers = S.workers();
   const el = document.getElementById('workers-list');
-  if (!workers.length) {
-    el.innerHTML = '<div class="empty-state">هیچ کارگری ثبت نشده است</div>';
-    return;
-  }
+  if (!workers.length) { el.innerHTML = '<div class="empty-state">هیچ کارگری ثبت نشده است</div>'; return; }
   el.innerHTML = '<div class="workers-grid">' + workers.map(w => `
     <div class="worker-card">
       <div class="worker-name">${esc(w.name)}</div>
       ${w.role ? `<div class="worker-role">${esc(w.role)}</div>` : ''}
-      <span class="badge ${w.type === 'daily' ? 'badge-daily' : 'badge-fixed'}">${w.type === 'daily' ? 'روزمزد' : 'ماهیانه ثابت'}</span>
-      <div class="worker-wage">${w.type === 'daily'
-        ? `دستمزد روزانه: ${fmt(w.dailyWage)} تومان`
-        : `حقوق ماهانه: ${fmt(w.monthlySalary)} تومان`}</div>
-      ${w.overtimeRate > 0 ? `<div class="worker-ot">اضافه‌کاری: ${fmt(w.overtimeRate)} ت/ساعت</div>` : ''}
+      <span class="badge ${w.type==='daily'?'badge-daily':'badge-fixed'}">${w.type==='daily'?'روزمزد':'ماهیانه ثابت'}</span>
+      <div class="worker-wage">${w.type==='daily'?`دستمزد روزانه: ${fmt(w.dailyWage)} تومان`:`حقوق ماهانه: ${fmt(w.monthlySalary)} تومان`}</div>
+      ${w.overtimeRate>0?`<div class="worker-ot">اضافه‌کاری: ${fmt(w.overtimeRate)} ت/ساعت</div>`:''}
       <div class="worker-actions">
-        <button class="btn-edit" onclick="openWorkerForm(${JSON.stringify(w).replace(/"/g,'&quot;')})">ویرایش</button>
+        <button class="btn-edit" onclick='openWorkerForm(${JSON.stringify(w).replace(/'/g,"&#39;")})'>ویرایش</button>
         <button class="btn-delete" onclick="deleteWorker('${w.id}')">حذف</button>
       </div>
-    </div>
-  `).join('') + '</div>';
+    </div>`).join('') + '</div>';
 }
 
 // ── Attendance ────────────────────────────────────────────
 function renderAttendance() {
-  document.getElementById('att-title').textContent = `حضور و غیاب — ${curMonth}/${curYear}`;
-  const days = daysInMonth(curYear, curMonth);
+  const days = J.daysInMonth(curYear, curMonth);
   const att = S.att();
   const workers = S.workers();
-
-  // ensure curDay valid for month
   if (curDay > days) curDay = days;
 
-  // Day picker
   let dp = '';
   for (let d = 1; d <= days; d++) {
     const hasData = workers.some(w => att[attKey(curYear, curMonth, d, w.id)]?.status === 'present');
-    dp += `<button class="day-btn${d === curDay ? ' sel' : ''}${hasData ? ' has-data' : ''}" onclick="selectDay(${d})">${d}</button>`;
+    dp += `<button class="day-btn${d===curDay?' sel':''}${hasData?' has-data':''}" onclick="selectDay(${d})">${d}</button>`;
   }
   document.getElementById('day-picker').innerHTML = dp;
 
@@ -362,28 +619,25 @@ function renderAttendance() {
     return;
   }
 
-  let rows = workers.map(w => {
+  const rows = workers.map(w => {
     const key = attKey(curYear, curMonth, curDay, w.id);
     const rec = att[key] || { status: 'absent', overtime: 0 };
-    const isPresent = rec.status === 'present';
-    return `
-      <tr class="${isPresent ? 'present' : 'absent'}" id="row-${w.id}">
-        <td>${esc(w.name)}</td>
-        <td>${esc(w.role||'—')}</td>
-        <td>
-          <div class="toggle-group">
-            <button class="toggle-btn${isPresent ? ' tp' : ''}" onclick="setStatus('${w.id}','present')">حاضر</button>
-            <button class="toggle-btn${!isPresent ? ' ta' : ''}" onclick="setStatus('${w.id}','absent')">غایب</button>
-          </div>
-        </td>
-        <td><input class="ot-input" type="number" min="0" max="12" step="0.5" value="${rec.overtime||''}" placeholder="0" onchange="setOT('${w.id}', this.value)"></td>
-      </tr>`;
+    const ip = rec.status === 'present';
+    return `<tr class="${ip?'present':'absent'}" id="row-${w.id}">
+      <td><strong>${esc(w.name)}</strong></td>
+      <td>${esc(w.role||'—')}</td>
+      <td><div class="toggle-group">
+        <button class="toggle-btn${ip?' tp':''}" onclick="setStatus('${w.id}','present')">حاضر</button>
+        <button class="toggle-btn${!ip?' ta':''}" onclick="setStatus('${w.id}','absent')">غایب</button>
+      </div></td>
+      <td><input class="ot-input" type="number" min="0" max="24" step="0.5" value="${rec.overtime||''}" placeholder="0" onchange="setOT('${w.id}',this.value)"></td>
+    </tr>`;
   }).join('');
 
   document.getElementById('att-content').innerHTML = `
     <div class="card">
       <div class="att-header">
-        <h3>روز ${curDay} — ماه ${curMonth}</h3>
+        <h3>${curDay} ${J.monthName(curMonth)} ${curYear}</h3>
         <button class="btn-secondary btn-sm" onclick="markAllPresent()">✓ همه حاضر</button>
       </div>
       <table>
@@ -393,23 +647,19 @@ function renderAttendance() {
     </div>`;
 }
 
-function selectDay(d) {
-  curDay = d;
-  renderAttendance();
-}
+function selectDay(d) { curDay = d; renderAttendance(); }
 
 function setStatus(wid, status) {
   const att = S.att();
   const key = attKey(curYear, curMonth, curDay, wid);
-  att[key] = { ...(att[key] || { overtime: 0 }), status };
-  S.saveAtt(att);
-  renderAttendance();
+  att[key] = { ...(att[key]||{overtime:0}), status };
+  S.saveAtt(att); renderAttendance();
 }
 
 function setOT(wid, val) {
   const att = S.att();
   const key = attKey(curYear, curMonth, curDay, wid);
-  att[key] = { ...(att[key] || { status: 'absent' }), overtime: val };
+  att[key] = { ...(att[key]||{status:'absent'}), overtime: val };
   S.saveAtt(att);
 }
 
@@ -417,15 +667,43 @@ function markAllPresent() {
   const att = S.att();
   S.workers().forEach(w => {
     const key = attKey(curYear, curMonth, curDay, w.id);
-    att[key] = { ...(att[key] || { overtime: 0 }), status: 'present' };
+    att[key] = { ...(att[key]||{overtime:0}), status:'present' };
   });
-  S.saveAtt(att);
-  renderAttendance();
+  S.saveAtt(att); renderAttendance();
+}
+
+// ── Advance (مساعده) ──────────────────────────────────────
+function renderAdvance() {
+  document.getElementById('adv-month-label').textContent = `${J.monthName(curMonth)} ${curYear}`;
+  const workers = S.workers();
+  const advances = S.advances();
+  if (!workers.length) {
+    document.getElementById('advance-list').innerHTML = '<div class="empty-state">ابتدا کارگران را ثبت کنید</div>';
+    return;
+  }
+  document.getElementById('advance-list').innerHTML = workers.map(w => {
+    const key = advKey(curYear, curMonth, w.id);
+    const val = advances[key] || '';
+    return `<div class="advance-row">
+      <span class="worker-label">${esc(w.name)}</span>
+      <input class="advance-input" type="number" min="0" placeholder="مبلغ مساعده (تومان)" value="${val}"
+        onchange="saveAdvance('${w.id}', this.value)">
+      <span class="advance-note">${val ? fmt(val) + ' تومان' : 'بدون مساعده'}</span>
+    </div>`;
+  }).join('');
+}
+
+function saveAdvance(wid, val) {
+  const advances = S.advances();
+  const key = advKey(curYear, curMonth, wid);
+  advances[key] = val;
+  S.saveAdvances(advances);
+  renderAdvance();
 }
 
 // ── Payroll ───────────────────────────────────────────────
-function calcPay(w, att) {
-  const days = daysInMonth(curYear, curMonth);
+function calcPay(w, att, advances) {
+  const days = J.daysInMonth(curYear, curMonth);
   let present = 0, otHours = 0;
   for (let d = 1; d <= days; d++) {
     const rec = att[attKey(curYear, curMonth, d, w.id)];
@@ -434,59 +712,61 @@ function calcPay(w, att) {
       if (rec.overtime) otHours += Number(rec.overtime);
     }
   }
-  const otPay = otHours * Number(w.overtimeRate || 0);
+  const otPay = otHours * Number(w.overtimeRate||0);
+  const advance = Number(advances[advKey(curYear, curMonth, w.id)] || 0);
+  const absentDays = days - present;
+  let base;
   if (w.type === 'fixed') {
-    const base = Number(w.monthlySalary || 0);
-    return { base, presentDays: present, absentDays: days - present, otHours, otPay, total: base + otPay };
+    base = Number(w.monthlySalary||0);
+  } else {
+    base = present * Number(w.dailyWage||0);
   }
-  const base = present * Number(w.dailyWage || 0);
-  const days_ = days;
-  return { base, presentDays: present, absentDays: days_ - present, otHours, otPay, total: base + otPay };
+  const total = base + otPay - advance;
+  return { base, presentDays: present, absentDays, otHours, otPay, advance, total };
 }
 
 function renderPayroll() {
-  document.getElementById('pay-title').textContent = `گزارش حقوق — ${curMonth}/${curYear}`;
-  const days = daysInMonth(curYear, curMonth);
-  document.getElementById('pay-days').textContent = `تعداد روزهای ماه: ${days}`;
+  document.getElementById('pay-title').textContent = `حقوق ${J.monthName(curMonth)} ${curYear}`;
+  const days = J.daysInMonth(curYear, curMonth);
+  document.getElementById('pay-days').textContent = `${days} روز کاری`;
   const workers = S.workers();
   const att = S.att();
+  const advances = S.advances();
 
   if (!workers.length) {
     document.getElementById('payroll-content').innerHTML = '<div class="empty-state">ابتدا کارگران را ثبت کنید</div>';
     return;
   }
 
-  const payrolls = workers.map(w => ({ w, ...calcPay(w, att) }));
+  const payrolls = workers.map(w => ({ w, ...calcPay(w, att, advances) }));
   const grand = payrolls.reduce((s, p) => s + p.total, 0);
 
   const cards = payrolls.map(p => `
     <div class="payroll-card">
+      <div class="step-label">کارگر</div>
       <div class="payroll-name">${esc(p.w.name)}</div>
       ${p.w.role ? `<div class="payroll-role">${esc(p.w.role)}</div>` : ''}
-      <span class="badge ${p.w.type === 'daily' ? 'badge-daily' : 'badge-fixed'}">${p.w.type === 'daily' ? 'روزمزد' : 'ماهیانه ثابت'}</span>
+      <span class="badge ${p.w.type==='daily'?'badge-daily':'badge-fixed'}">${p.w.type==='daily'?'روزمزد':'ماهیانه ثابت'}</span>
       <table class="detail-table">
         <tr><td>روزهای حاضر</td><td>${p.presentDays} روز</td></tr>
         <tr><td>روزهای غایب</td><td class="val-absent">${p.absentDays} روز</td></tr>
-        <tr><td>${p.w.type === 'daily' ? 'دستمزد پایه' : 'حقوق پایه'}</td><td>${fmt(p.base)} تومان</td></tr>
-        <tr><td>اضافه‌کاری</td><td>${p.otHours} ساعت</td></tr>
-        <tr><td>مبلغ اضافه‌کاری</td><td class="val-ot">${fmt(p.otPay)} تومان</td></tr>
+        <tr><td>${p.w.type==='daily'?'دستمزد پایه':'حقوق پایه'}</td><td>${fmt(p.base)} تومان</td></tr>
+        <tr><td>اضافه‌کاری (${p.otHours} ساعت)</td><td class="val-ot">+ ${fmt(p.otPay)} تومان</td></tr>
+        <tr><td>مساعده</td><td class="val-advance">- ${fmt(p.advance)} تومان</td></tr>
       </table>
-      <div class="payroll-total">جمع کل: <strong>${fmt(p.total)} تومان</strong></div>
-    </div>
-  `).join('');
+      <div class="payroll-total">
+        <span class="label">خالص پرداختی</span>
+        <strong>${fmt(p.total)} تومان</strong>
+      </div>
+    </div>`).join('');
 
   document.getElementById('payroll-content').innerHTML = `
     <div class="payroll-cards">${cards}</div>
     <div class="grand-total">
-      <span>جمع کل حقوق همه کارگران:</span>
+      <span>جمع کل حقوق ${J.monthName(curMonth)}:</span>
       <strong>${fmt(grand)} تومان</strong>
     </div>
-    <button class="btn-print" onclick="window.print()">🖨️ چاپ / ذخیره PDF</button>
-  `;
-}
-
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    <button class="btn-print" onclick="window.print()">🖨️ چاپ / ذخیره PDF</button>`;
 }
 
 // ── Init ──────────────────────────────────────────────────
